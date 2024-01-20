@@ -1,6 +1,8 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:udemy_flutter/modules/home/home_screen.dart';
 import 'package:udemy_flutter/modules/users/users_screen.dart';
+import 'package:udemy_flutter/shared/bloc_observer.dart';
 
 import 'layout/home_layout.dart';
 import 'modules/bmi/bmi_screen.dart';
@@ -12,6 +14,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 
 void main() {
+  Bloc.observer = MyBlocObserver();
   Future main() async {
 
 // Initialize FFI
@@ -32,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeLayout(),
+      home: CounterScreen(),
     );
   }
 }

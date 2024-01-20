@@ -5,6 +5,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:udemy_flutter/modules/archived_tasks/archived_tasks_screen.dart';
 import 'package:udemy_flutter/modules/done_tasks/done_tasks_screen.dart';
 import 'package:udemy_flutter/shared/components/components.dart';
+import 'package:udemy_flutter/shared/components/constants.dart';
 
 import '../modules/new_tasks/new_tasks_screen.dart';
 
@@ -37,7 +38,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   var timeController = TextEditingController();
   var dateController = TextEditingController();
 
-  List<Map> tasks = [];
+
 
   @override
   void initState(){
@@ -55,7 +56,7 @@ class _HomeLayoutState extends State<HomeLayout> {
           titles[curentIndex],
         ),
       ),
-      body: screen[curentIndex],
+      body: tasks.length == 0 ? Center(child: CircularProgressIndicator()) : screen[curentIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (isBottomSheetShown){
@@ -65,14 +66,24 @@ class _HomeLayoutState extends State<HomeLayout> {
                 date: dateController.text,
                 time: timeController.text,
               ).then((value){
-                Navigator.pop(context);
-                isBottomSheetShown = false;
-                setState(() {
-                  fabIcon =  Icons.edit;
+                getDataFromDatabase(database).then((value){
+                  Navigator.pop(context);
+                  setState(() {
+                    isBottomSheetShown = false;
+                    fabIcon =  Icons.edit;
+
+                    tasks = value;
+                    print('-------------------');
+                    print(tasks);
+                    print('-------------------');
+                  });
                 });
               });
 
-            }
+
+              };
+
+
             print(isBottomSheetShown = true);
           }else {
             scaffoldKey.currentState?.showBottomSheet(
@@ -223,7 +234,9 @@ class _HomeLayoutState extends State<HomeLayout> {
           },
           onOpen: (database){
             getDataFromDatabase(database).then((value){
-              tasks = value;
+              setState(() {
+                tasks = value;
+              });
             });
             print('database open');
           }

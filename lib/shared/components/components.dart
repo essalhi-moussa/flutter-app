@@ -67,3 +67,55 @@ Widget defaultFormField({
 );
 
 
+Widget buildTasksItem(Map model
+    // {
+    //   Object  task,
+    //   void Function(bool?)? onChange
+    // }
+) =>  Padding(
+  padding: const EdgeInsets.all(20.0),
+  child: Row(
+    children: [
+      CircleAvatar(
+        radius: 40.0,
+        child: Text(
+          '${model['time']}',
+        ),
+      ),
+      // Checkbox(
+      //   value: task.completed,
+      //   onChanged: onChange,
+      //   //     (bool? value) {
+      //   //   Update the completion status of the task in the database
+      //   //   You may want to call a function to update the database here
+      //   //   setState(() {
+      //   //     task.completed = value ?? false;
+      //   //   });
+      //   // },
+      // ),
+      SizedBox(
+        width: 20.0,
+      ),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${model['title']}',
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            '${model['date']}',
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+);
+
