@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:udemy_flutter/shared/cubit/cubit.dart';
 
 // --------------- Button --------------
@@ -69,86 +70,162 @@ Widget defaultFormField({
 );
 
 
-Widget buildTasksItem(Map model, context
-    // {
-    //   Object  task,
-    //   void Function(bool?)? onChange
-    // }
-) =>  Dismissible(
+
+// --------------- Item ListView  --------------
+Widget buildTasksItem(Map model, context) =>  Dismissible(
+  background: Container(
+    color: Colors.redAccent,
+  ),
   key: Key(model['id'].toString()),
   child:   Padding(
-    padding: const EdgeInsets.all(20.0),
-    child: Row(
-      children: [
-        CircleAvatar(
-          radius: 40.0,
-          child: Text(
-            '${model['time']}',
-          ),
-        ),
-        // Checkbox(
-        //   value: task.completed,
-        //   onChanged: onChange,
-        //   //     (bool? value) {
-        //   //   Update the completion status of the task in the database
-        //   //   You may want to call a function to update the database here
-        //   //   setState(() {
-        //   //     task.completed = value ?? false;
-        //   //   });
-        //   // },
-        // ),
-        SizedBox(
-          width: 20.0,
-        ),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${model['title']}',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Color(0xFFD2EBE5),
+        borderRadius: BorderRadius.circular(8.0), // Adjust the radius as per your requirement
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            // CircleAvatar(
+            //   radius: 40.0,
+            //   child: Text(
+            //     '${model['time']}',
+            //   ),
+            // ),
+            Checkbox(
+              value: model['status'] == 'done' ? true : false, // The initial value of the checkbox
+              onChanged: (bool? newValue) {
+                print("##### $newValue");
+                if (newValue != null && newValue == true) {
+                  AppCubit.get(context)
+                      .updateData(status: 'done', id: model['id']);
+                }else{
+                  AppCubit.get(context)
+                      .updateData(status: 'new', id: model['id']);
+                }
+              },
+            ),
+
+            SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${model['title']}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${model['date']}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                '${model['date']}',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: 20.0,
-        ),
-        IconButton(
-            onPressed: (){
-              AppCubit.get(context).updateData(status: 'done', id: model['id']);
-            },
-            icon: Icon(
-              Icons.check_box,
-              color: Colors.green,
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            IconButton(
+                onPressed: (){
+                  AppCubit.get(context).updateData(status: 'archive', id: model['id']);
+                },
+                icon: Icon(
+                    Icons.archive,
+                  color: Colors.black45,
+                )
             )
+          ],
         ),
-        IconButton(
-            onPressed: (){
-              AppCubit.get(context).updateData(status: 'archive', id: model['id']);
-            },
-            icon: Icon(
-                Icons.archive,
-              color: Colors.black45,
-            )
-        )
-      ],
+      ),
     ),
   ),
   onDismissed: (direction){
 AppCubit.get(context).deleteData(id: model['id']);
   },
 );
+
+// --------------- Secande scrolable Item ListView  --------------
+// Widget buildTasksItem(Map model, context) {
+//   return Slidable(
+//     // Specify a key if the Slidable is dismissible.
+//     key: Key(model['id'].toString()),
+//
+//     // The start action pane is the one at the left or the top side.
+//     startActionPane: ActionPane(
+//       // A motion is a widget used to control how the pane animates.
+//       motion: const ScrollMotion(),
+//
+//       // A pane can dismiss the Slidable.
+//       dismissible: DismissiblePane(onDismissed: () {}),
+//
+//       // All actions are defined in the children parameter.
+//       children: [
+//         // A SlidableAction can have an icon and/or a label.
+//         SlidableAction(
+//           onPressed: (context){
+//             AppCubit.get(context).deleteData(id: model['id']);
+//             },
+//           backgroundColor: Color(0xFFFE4A49),
+//           foregroundColor: Colors.white,
+//           icon: Icons.delete,
+//           label: 'Delete',
+//         ),
+//
+//       ],
+//     ),
+//
+//     // The end action pane is the one at the right or the bottom side.
+//     endActionPane:  ActionPane(
+//       motion: ScrollMotion(),
+//       children: [
+//         SlidableAction(
+//           // An action can be bigger than the others.
+//           flex: 2,
+//           onPressed: (context){
+//             AppCubit.get(context).updateData(status: 'archive', id: model['id']);
+//           },
+//           backgroundColor: Color(0xFF7BC043),
+//           foregroundColor: Colors.white,
+//           icon: Icons.archive,
+//           label: 'Archive',
+//         ),
+//         SlidableAction(
+//           onPressed: (context){
+//             AppCubit.get(context).updateData(status: 'done', id: model['id']);
+//           },
+//           backgroundColor: Color(0xFF21B7CA),
+//           foregroundColor: Colors.white,
+//           icon: Icons.done,
+//           label: 'Done',
+//         ),
+//       ],
+//     ),
+//
+//     // The child of the Slidable is what the user sees when the
+//     // component is not dragged.
+//     child:  ListTile(title:  Text(
+//       '${model['title']}',
+//       style: TextStyle(
+//         fontSize: 16.0,
+//         fontWeight: FontWeight.bold,
+//       ),
+//     ),),
+//   );
+// }
+
+
+// --------------- tasksBuilder  --------------
+
 
 Widget tasksBuilder({
   required List<Map> tasks,
@@ -172,18 +249,24 @@ Widget tasksBuilder({
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          Icons.menu,
-          size: 80.0,
-          color: Colors.grey,
-        ),
-        Text(
-          'No Tasks Yet, Please Add Some Tesks',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
+        // Icon(
+        //   Icons.menu,
+        //   size: 80.0,
+        //   color: Colors.grey,
+        // ),
+
+        // Text(
+        //   'No Tasks Yet, Please Add Some Tesks',
+        //   style: TextStyle(
+        //     fontSize: 16.0,
+        //     fontWeight: FontWeight.bold,
+        //     color: Colors.grey,
+        //   ),
+        // ),
+        Image(
+          image: AssetImage('assets/images/to_do_app.png'),
+          height: 300.0,
+          width: 600.0,
         ),
       ],
     ),

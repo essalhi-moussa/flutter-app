@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:udemy_flutter/shared/cubit/states.dart';
 
 import '../../modules/archived_tasks/archived_tasks_screen.dart';
@@ -40,8 +41,8 @@ class AppCubit extends Cubit<AppStates>{
 
   void createDatabase()  {
     try {
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
+      // sqfliteFfiInit();
+      // databaseFactory = databaseFactoryFfi;
 
       openDatabase(
           'todo.db',

@@ -38,8 +38,11 @@ class HomeLayout extends StatelessWidget {
          return Scaffold(
            key: scaffoldKey,
            appBar: AppBar(
-             title: Text(
-               cubit.titles[cubit.curentIndex],
+             backgroundColor: Color(0xFF00896D),
+             title: Center(
+               child: Text(
+                 cubit.titles[cubit.curentIndex],
+               ),
              ),
            ),
            // body: tasks.length == 0 ? Center(child: CircularProgressIndicator()) : cubit.screens[cubit.curentIndex],
@@ -49,34 +52,13 @@ class HomeLayout extends StatelessWidget {
              fallback: (context) => Center(child: CircularProgressIndicator())
            ),
            floatingActionButton: FloatingActionButton(
+             backgroundColor: Color(0xFF00896D),
              onPressed: () {
                if (cubit.isBottomSheetShown){
                  if(formdKey.currentState!.validate()){
-                   cubit.insertToDatabase(title: titleController.text, time: timeController.text, date: dateController.text);
-                   // insertToDatabase(
-                   //   title: titleController.text,
-                   //   date: dateController.text,
-                   //   time: timeController.text,
-                   // ).then((value){
-                   //   getDataFromDatabase(database).then((value){
-                   //     Navigator.pop(context);
-                   //     // setState(() {
-                   //     //   isBottomSheetShown = false;
-                   //     //   fabIcon =  Icons.edit;
-                   //     //
-                   //     //   tasks = value;
-                   //     //   print('-------------------');
-                   //     //   print(tasks);
-                   //     //   print('-------------------');
-                   //     // });
-                   //   });
-                   // });
-
-
+                   // cubit.insertToDatabase(title: titleController.text, time: timeController.text, date: dateController.text);
+                   cubit.insertToDatabase(title: titleController.text, time: timeController.text, date: DateFormat.yMMMd().format(DateTime.now()));
                  };
-
-
-                 //print(isBottomSheetShown = true);
                }else {
                  scaffoldKey.currentState?.showBottomSheet(
                        (context) =>
@@ -103,52 +85,52 @@ class HomeLayout extends StatelessWidget {
                                SizedBox(
                                  height: 16.0,
                                ),
-                               defaultFormField(
-                                 controller: timeController,
-                                 type: TextInputType.datetime,
-                                 onTap: (){
-                                   showTimePicker(
-                                       context: context,
-                                       initialTime: TimeOfDay.now()).then((value){
-                                     timeController.text = value!.format(context).toString();
-                                     print(value?.format(context));
-                                   });
-                                 },
-                                 validate: (String? value) {
-                                   if (value!.isEmpty) {
-                                     return 'time must not be empty';
-                                   }
-                                   return null;
-                                 },
-                                 label: 'Task time',
-                                 prefix: Icons.watch_later_outlined,
-                               ),
-                               SizedBox(
-                                 height: 16.0,
-                               ),
-                               defaultFormField(
-                                 controller: dateController,
-                                 type: TextInputType.datetime,
-                                 onTap: (){
-                                   showDatePicker(
-                                     context: context,
-                                     initialDate: DateTime.now(),
-                                     firstDate:  DateTime.now(),
-                                     lastDate:  DateTime.parse('2026-12-31'),
-                                   ).then((value){
-                                     print(DateFormat.yMMMd().format(value!));
-                                     dateController.text = DateFormat.yMMMd().format(value!);
-                                   });
-                                 },
-                                 validate: (String? value) {
-                                   if (value!.isEmpty) {
-                                     return 'date must not be empty';
-                                   }
-                                   return null;
-                                 },
-                                 label: 'Task Date',
-                                 prefix: Icons.calendar_today,
-                               ),
+                               // defaultFormField(
+                               //   controller: timeController,
+                               //   type: TextInputType.datetime,
+                               //   onTap: (){
+                               //     showTimePicker(
+                               //         context: context,
+                               //         initialTime: TimeOfDay.now()).then((value){
+                               //       timeController.text = value!.format(context).toString();
+                               //       print(value?.format(context));
+                               //     });
+                               //   },
+                               //   validate: (String? value) {
+                               //     if (value!.isEmpty) {
+                               //       return 'time must not be empty';
+                               //     }
+                               //     return null;
+                               //   },
+                               //   label: 'Task time',
+                               //   prefix: Icons.watch_later_outlined,
+                               // ),
+                               // SizedBox(
+                               //   height: 16.0,
+                               // ),
+                               // defaultFormField(
+                               //   controller: dateController,
+                               //   type: TextInputType.datetime,
+                               //   onTap: (){
+                               //     showDatePicker(
+                               //       context: context,
+                               //       initialDate: DateTime.now(),
+                               //       firstDate:  DateTime.now(),
+                               //       lastDate:  DateTime.parse('2026-12-31'),
+                               //     ).then((value){
+                               //       print(DateFormat.yMMMd().format(value!));
+                               //       dateController.text = DateFormat.yMMMd().format(value!);
+                               //     });
+                               //   },
+                               //   validate: (String? value) {
+                               //     if (value!.isEmpty) {
+                               //       return 'date must not be empty';
+                               //     }
+                               //     return null;
+                               //   },
+                               //   label: 'Task Date',
+                               //   prefix: Icons.calendar_today,
+                               // ),
                              ],
                            ),
                          ),
@@ -170,6 +152,7 @@ class HomeLayout extends StatelessWidget {
              onTap: (index){
                cubit.changeIndex(index);
              },
+             selectedItemColor: Color(0xFF00896D),
              items: [
                BottomNavigationBarItem(
                    icon: Icon(
