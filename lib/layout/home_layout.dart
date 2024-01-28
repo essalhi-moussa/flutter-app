@@ -15,12 +15,8 @@ import '../modules/new_tasks/new_tasks_screen.dart';
 
 class HomeLayout extends StatelessWidget {
 
-
-  late Database database;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var formdKey = GlobalKey<FormState>();
-  bool isBottomSheetShown = false;
-  IconData fabIcon = Icons.edit;
   var titleController = TextEditingController();
   var timeController = TextEditingController();
   var dateController = TextEditingController();
@@ -30,9 +26,13 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  BlocProvider(
-      create: (BuildContext context) => AppCubit(),
+      create: (BuildContext context) => AppCubit()..createDatabase(),
       child: BlocConsumer<AppCubit, AppStates>(
-       listener: (BuildContext comtext, AppStates state) {},
+       listener: (BuildContext context, AppStates state) {
+         if(state is AppInsertDatabaseState){
+            Navigator.pop(context);
+         }
+       },
         builder: (BuildContext context, AppStates state) {
          AppCubit cubit = AppCubit.get(context);
          return Scaffold(
@@ -44,38 +44,39 @@ class HomeLayout extends StatelessWidget {
            ),
            // body: tasks.length == 0 ? Center(child: CircularProgressIndicator()) : cubit.screens[cubit.curentIndex],
            body: ConditionalBuilder(
-             condition: true,
+             condition: state is! AppGetDatabaseLoadingState,
              builder: (context) => cubit.screens[cubit.curentIndex],
              fallback: (context) => Center(child: CircularProgressIndicator())
            ),
            floatingActionButton: FloatingActionButton(
              onPressed: () {
-               if (isBottomSheetShown){
+               if (cubit.isBottomSheetShown){
                  if(formdKey.currentState!.validate()){
-                   insertToDatabase(
-                     title: titleController.text,
-                     date: dateController.text,
-                     time: timeController.text,
-                   ).then((value){
-                     getDataFromDatabase(database).then((value){
-                       Navigator.pop(context);
-                       // setState(() {
-                       //   isBottomSheetShown = false;
-                       //   fabIcon =  Icons.edit;
-                       //
-                       //   tasks = value;
-                       //   print('-------------------');
-                       //   print(tasks);
-                       //   print('-------------------');
-                       // });
-                     });
-                   });
+                   cubit.insertToDatabase(title: titleController.text, time: timeController.text, date: dateController.text);
+                   // insertToDatabase(
+                   //   title: titleController.text,
+                   //   date: dateController.text,
+                   //   time: timeController.text,
+                   // ).then((value){
+                   //   getDataFromDatabase(database).then((value){
+                   //     Navigator.pop(context);
+                   //     // setState(() {
+                   //     //   isBottomSheetShown = false;
+                   //     //   fabIcon =  Icons.edit;
+                   //     //
+                   //     //   tasks = value;
+                   //     //   print('-------------------');
+                   //     //   print(tasks);
+                   //     //   print('-------------------');
+                   //     // });
+                   //   });
+                   // });
 
 
                  };
 
 
-                 print(isBottomSheetShown = true);
+                 //print(isBottomSheetShown = true);
                }else {
                  scaffoldKey.currentState?.showBottomSheet(
                        (context) =>
@@ -154,19 +155,13 @@ class HomeLayout extends StatelessWidget {
                        ),
                    elevation: 20.0,
                  ).closed.then((value){
-                   isBottomSheetShown = false;
-                   // setState(() {
-                   //   fabIcon =  Icons.edit;
-                   // });
+                   cubit.changeBottomSheetState(isShow: false, icon: Icons.edit);
                  });
-                 isBottomSheetShown = true;
-                 // setState(() {
-                 //   fabIcon =  Icons.add;
-                 // });
+                 cubit.changeBottomSheetState(isShow: true, icon: Icons.add);
                }
              },
              child: Icon(
-               fabIcon,
+               cubit.fabIcon,
              ),
            ),
            bottomNavigationBar: BottomNavigationBar(
@@ -208,90 +203,7 @@ class HomeLayout extends StatelessWidget {
     return 'Ahmed Ali';
   }
 
-  void createDatabase() async {
-    try {
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
 
-      database = await openDatabase(
-          'todo.db',
-          version: 1,
-          onCreate: (database, version)  {
-            print('database created');
-            database.execute('CREATE TABLE Tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)').then((value){
-              print('table created');
-            }).catchError((Error){
-              print('error when creating table ${Error.toString()} ');
-            });
-          },
-          onOpen: (database){
-            getDataFromDatabase(database).then((value){
-              // setState(() {
-              //   tasks = value;
-              // });
-            });
-            print('database open');
-          }
-      );
-    } catch (e) {
-      print('Error creating database: $e');
-    }
-  }
-
-  // void insertToDatabase({
-  //     required String title,
-  //     required String time,
-  //     required String date,
-  //     })
-  //     {
-  //   try {
-  //     // return database.transaction((txn) async {
-  //     //   int result = await txn.rawInsert(
-  //     //     'INSERT INTO Tasks(title, date, time, status) VALUES("first task" , "0222", "111", "active")'
-  //     // );
-  //     database.transaction((txn){
-  //       txn.rawInsert('INSERT INTO Tasks(title, date, time, status) VALUES("first task" , "0222", "111", "active")').then((value) {
-  //       print('$value inserted successfuly');
-  //     }).catchError((er){
-  //       print('error when Inserting New Record  ${er.toString()} ');
-  //     });
-  //
-  //       // print('$result inserted successfully');
-  //       // return null;
-  //   });
-  //   } catch (error) {
-  //     print('Error when inserting new record: $error');
-  //   }
-  // }
-
-  Future  insertToDatabase(
-      {
-        required String title,
-        required String time,
-        required String date,
-      }
-      ) async {
-    try {
-      return  await database.transaction((txn) async {
-        try {
-          int result = await txn.rawInsert(
-            'INSERT INTO Tasks(title, date, time, status) VALUES(?, ?, ?, "new")',
-            [title, date, time],
-          );
-
-          print('$result inserted successfully');
-        } catch (error) {
-          print('Error when executing rawInsert: $error');
-        }
-      });
-    } catch (error) {
-      print('Error when opening database transaction: $error');
-    }
-  }
-
-  Future<List<Map>> getDataFromDatabase(database) async {
-    return await database.rawQuery('SELECT * FROM Tasks');
-  }
 
 }
 
