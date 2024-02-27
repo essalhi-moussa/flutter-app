@@ -1,21 +1,19 @@
-import 'package:bloc/bloc.dart';
+import 'package:udemy_flutter/shared/cubit/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
+import 'package:bloc/bloc.dart';
+
+// import 'package:sqflite_common/sqlite_api.dart';
 // import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:udemy_flutter/shared/cubit/states.dart';
+// import 'package:sqflite/sqflite.dart';
+
 
 import '../../modules/archived_tasks/archived_tasks_screen.dart';
 import '../../modules/done_tasks/done_tasks_screen.dart';
 import '../../modules/new_tasks/new_tasks_screen.dart';
 
 class AppCubit extends Cubit<AppStates>{
-  AppCubit() : super(AppInitialState());
-
-  static AppCubit get(context) => BlocProvider.of(context);
-
   int curentIndex = 0;
   List<Widget> screens = [
     NewTasksScreen(),
@@ -27,6 +25,16 @@ class AppCubit extends Cubit<AppStates>{
     'Done Tasks',
     'Archived Tasks',
   ];
+  late Database database;
+  List<Map> newTasks = [];
+  List<Map> donTasks = [];
+  List<Map> archivedTasks = [];
+
+  AppCubit() : super(AppInitialState());
+
+  static AppCubit get(context) => BlocProvider.of(context);
+
+
 
   void changeIndex(int index){
     curentIndex = index;
@@ -34,22 +42,19 @@ class AppCubit extends Cubit<AppStates>{
   }
 
 
-  late Database database;
-  List<Map> newTasks = [];
-  List<Map> donTasks = [];
-  List<Map> archivedTasks = [];
 
-  void createDatabase()  {
+
+  Future<void> createDatabase() async {
     try {
       // sqfliteFfiInit();
       // databaseFactory = databaseFactoryFfi;
 
-      openDatabase(
+      await openDatabase(
           'todo.db',
           version: 1,
-          onCreate: (database, version)  {
+          onCreate: (database, version) async  {
             print('database created');
-            database.execute('CREATE TABLE Tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)').then((value){
+            await database.execute('CREATE TABLE Tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)').then((value){
               print('table created');
             }).catchError((Error){
               print('error when creating table ${Error.toString()} ');

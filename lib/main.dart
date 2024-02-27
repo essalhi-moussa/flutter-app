@@ -10,20 +10,20 @@ import 'modules/counter/counter_screen.dart';
 import 'modules/login/login_screen.dart';
 import 'modules/messenger/messenger_screen.dart';
 
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() {
-  Bloc.observer = MyBlocObserver();
-  Future main() async {
-
-// Initialize FFI
+  // Bloc.observer = MyBlocObserver();
+//   Future main() async {
+//
+// // Initialize FFI
 //     sqfliteFfiInit();
 //
 //
 //     databaseFactory = databaseFactoryFfi;
-    runApp(MyApp());
-  }
+//     runApp(MyApp());
+//   }
   runApp(const MyApp());
 }
 

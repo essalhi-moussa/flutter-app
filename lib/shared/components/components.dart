@@ -75,6 +75,19 @@ Widget defaultFormField({
 Widget buildTasksItem(Map model, context) =>  Dismissible(
   background: Container(
     color: Colors.redAccent,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Icon(Icons.delete, color: Colors.white),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Icon(Icons.delete, color: Colors.white),
+        ),
+      ],
+    ),
   ),
   key: Key(model['id'].toString()),
   child:   Padding(

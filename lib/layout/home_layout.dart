@@ -42,6 +42,9 @@ class HomeLayout extends StatelessWidget {
              title: Center(
                child: Text(
                  cubit.titles[cubit.curentIndex],
+                 style: TextStyle(
+                   color: Colors.white,
+                 ),
                ),
              ),
            ),
@@ -53,6 +56,7 @@ class HomeLayout extends StatelessWidget {
            ),
            floatingActionButton: FloatingActionButton(
              backgroundColor: Color(0xFF00896D),
+             foregroundColor: Colors.white,
              onPressed: () {
                if (cubit.isBottomSheetShown){
                  if(formdKey.currentState!.validate()){
