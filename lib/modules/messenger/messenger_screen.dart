@@ -16,7 +16,7 @@ class MessengerScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20.0,
-              backgroundImage: NetworkImage(''),
+              backgroundImage: NetworkImage('https://i.pinimg.com/originals/90/a7/f6/90a7f67864acea71fb5ffed6aa6298cb.jpg'),
             ),
             SizedBox(
               width: 10.0,
@@ -952,7 +952,7 @@ class MessengerScreen extends StatelessWidget {
        children: [
          CircleAvatar(
            radius: 30.0,
-           backgroundImage: NetworkImage(''),
+           backgroundImage: NetworkImage('https://dojotaku.com/cdn/shop/articles/roronoa-zoro-one-piece.webp?v=1686739204'),
          ),
          // CircleAvatar(
          //   radius: 8.0,
@@ -975,7 +975,7 @@ class MessengerScreen extends StatelessWidget {
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.start,
          children: [
-           Text("Moussa Said ESSALHI ",
+           Text("Roronoa Zoro",
              maxLines: 1,
              overflow: TextOverflow.ellipsis,
              style: TextStyle(
@@ -988,7 +988,7 @@ class MessengerScreen extends StatelessWidget {
              children: [
                Expanded(
                    child: Text(
-                     "hello my name is Moussa Said ",
+                     "hello zoro",
                      maxLines: 2,
                      overflow: TextOverflow.ellipsis,
                    )
@@ -1023,7 +1023,7 @@ class MessengerScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30.0,
-              backgroundImage: NetworkImage(''),
+              backgroundImage: NetworkImage('https://dojotaku.com/cdn/shop/articles/roronoa-zoro-one-piece.webp?v=1686739204'),
             ),
             // CircleAvatar(
             //   radius: 8.0,
@@ -1042,8 +1042,8 @@ class MessengerScreen extends StatelessWidget {
           ],
         ),
         SizedBox(height: 6.0,),
-        Text('Moussa said ESSALHI',
-          maxLines: 2,
+        Text('Roronoa Zoro',
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,),
       ],
     ),
