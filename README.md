@@ -1,16 +1,7 @@
-# udemy_flutter
+# My First Flutter App
 
-A new Flutter project.
+A collection of Flutter apps I built during a Flutter course.
 
-## Getting Started
+## Todo List
+<img src="https://github.com/essalhi-moussa/flutter-app/assets/106810202/d5f12c29-19d6-40b1-97da-725f42163a1b">
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
